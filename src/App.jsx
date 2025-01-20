@@ -30,28 +30,36 @@ function App() {
       return;
     }
 
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     if (!formData.email) {
       toast.error("Email is required!");
       return;
+    } else if (!emailRegex.test(formData.email)) {
+      toast.error("Please enter a valid Gmail address!");
+      return;
     }
 
+    const phoneRegex = /^[0-9]{10}$/;
     if (!formData.phoneNumber) {
       toast.error("Phone number is required!");
       return;
-
-    }
-    if(!formData.gender){
-      toast.error("gender is required")
-      return
+    } else if (!phoneRegex.test(formData.phoneNumber)) {
+      toast.error("Phone number must be exactly 10 digits and contain only numbers!");
+      return;
     }
 
-    if (formData.phoneNumber.length !== 10) {
-      alert("Phone number must be exactly 10 digits!");
+    if (!formData.gender) {
+      toast.error("Gender is required!");
+      return;
+    }
+
+    if (!formData.dateOfBirth) {
+      toast.error("Date of Birth is required!");
       return;
     }
 
     toast.success("Form submitted successfully!");
-    
+
     setFormData({
       firstName: '',
       lastName: '',
@@ -59,7 +67,12 @@ function App() {
       dateOfBirth: '',
       email: '',
       phoneNumber: '',
-    })
+    });
+  };
+
+  const handlePhoneNumberChange = (e) => {
+    const value = e.target.value.replace(/[^0-9]/g, '');
+    setFormData({ ...formData, phoneNumber: value });
   };
 
   return (
@@ -98,7 +111,6 @@ function App() {
                   type="radio"
                   value="Male"
                   name="gender"
-                  aria-label="radio 1"
                   label="Male"
                   checked={formData.gender === 'Male'}
                   onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
@@ -109,14 +121,15 @@ function App() {
                   type="radio"
                   value="Female"
                   name="gender"
-                  aria-label="radio 2"
                   label="Female"
                   checked={formData.gender === 'Female'}
                   onChange={(e) => setFormData({ ...formData, gender: e.target.value })}
                 />
               </div>
-           
-                    <Row className="d-flex  col-sm-2 col-lg-12">
+            </div>
+          </div>
+
+          <Row className="d-flex justify-content-center mt-3">
             <Col xs={12} className="mb-3">
               <Form.Label>Date of Birth</Form.Label>
               <Form.Control
@@ -126,8 +139,6 @@ function App() {
               />
             </Col>
           </Row>
-          </div>
-          </div>
 
           <Row className="d-flex justify-content-center mt-3">
             <Col xs={6} className="mb-3">
@@ -142,12 +153,12 @@ function App() {
           </Row>
 
           <Row className="d-flex justify-content-center mt-3">
-            <Col xs={6 } className="mb-3">
+            <Col xs={6} className="mb-3">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type="text"
                 value={formData.phoneNumber}
-                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                onChange={handlePhoneNumberChange}
                 placeholder="Phone Number (10 digits)"
                 maxLength={10}
               />
@@ -160,7 +171,14 @@ function App() {
           >
             Submit
           </Button>
-          <ToastContainer/>
+
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            closeOnClick
+            pauseOnHover
+          />
         </Form>
       </center>
     </>
