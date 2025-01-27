@@ -6,6 +6,7 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -17,48 +18,55 @@ function App() {
     phoneNumber: '',
   });
 
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
     if (!formData.firstName) {
-      toast.error("First name is required!");
+      toast.error('First name is required!');
       return;
     }
 
     if (!formData.lastName) {
-      toast.error("Last name is required!");
+      toast.error('Last name is required!');
       return;
     }
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
     if (!formData.email) {
-      toast.error("Email is required!");
+      toast.error('Email is required!');
       return;
     } else if (!emailRegex.test(formData.email)) {
-      toast.error("Please enter a valid Gmail address!");
+      toast.error('Please enter a valid Gmail address!');
       return;
     }
 
     const phoneRegex = /^[0-9]{10}$/;
     if (!formData.phoneNumber) {
-      toast.error("Phone number is required!");
+      toast.error('Phone number is required!');
       return;
     } else if (!phoneRegex.test(formData.phoneNumber)) {
-      toast.error("Phone number must be exactly 10 digits and contain only numbers!");
+      toast.error('Phone number must be exactly 10 digits and contain only numbers!');
       return;
     }
 
     if (!formData.gender) {
-      toast.error("Gender is required!");
+      toast.error('Gender is required!');
       return;
     }
 
     if (!formData.dateOfBirth) {
-      toast.error("Date of Birth is required!");
+      toast.error('Date of Birth is required!');
       return;
     }
 
-    toast.success("Form submitted successfully!");
+    if (!captchaVerified) {
+      toast.error('Please verify the CAPTCHA before submitting!');
+      return;
+    }
+
+    toast.success('Form submitted successfully!');
 
     setFormData({
       firstName: '',
@@ -68,6 +76,8 @@ function App() {
       email: '',
       phoneNumber: '',
     });
+
+    setCaptchaVerified(false);
   };
 
   const handlePhoneNumberChange = (e) => {
@@ -88,7 +98,16 @@ function App() {
               <Form.Control
                 type="text"
                 value={formData.firstName}
-                onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/[^a-zA-Z]/.test(value)) {
+                    alert('Only alphabets are allowed in First Name!');
+                  }
+                  setFormData({
+                    ...formData,
+                    firstName: value.replace(/[^a-zA-Z]/g, ''),
+                  });
+                }}
                 placeholder="First"
               />
             </Col>
@@ -98,7 +117,16 @@ function App() {
               <Form.Control
                 type="text"
                 value={formData.lastName}
-                onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/[^a-zA-Z]/.test(value)) {
+                    alert('Only alphabets are allowed in Last Name!');
+                  }
+                  setFormData({
+                    ...formData,
+                    lastName: value.replace(/[^a-zA-Z]/g, ''),
+                  });
+                }}
                 placeholder="Last"
               />
             </Col>
@@ -164,6 +192,9 @@ function App() {
               />
             </Col>
           </Row>
+
+          
+          
 
           <Button
             style={{ width: '150px', marginTop: '50px', borderRadius: '10px' }}
