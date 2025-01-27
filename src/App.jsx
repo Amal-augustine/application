@@ -77,7 +77,6 @@ function App() {
       phoneNumber: '',
     });
 
-    setCaptchaVerified(false);
   };
 
   const handlePhoneNumberChange = (e) => {
@@ -92,7 +91,7 @@ function App() {
         <p>Enter your information below</p>
 
         <Form onSubmit={handleSubmit}>
-          <Row className="d-flex justify-content-center">
+          <div className=" justify-content-center"/>
             <Col xs={6} className="mb-3">
               <Form.Label>First Name</Form.Label>
               <Form.Control
@@ -130,7 +129,6 @@ function App() {
                 placeholder="Last"
               />
             </Col>
-          </Row>
 
           <div className="d-flex justify-content-center mt-3">
             <div className="d-flex">
@@ -157,7 +155,7 @@ function App() {
             </div>
           </div>
 
-          <Row className="d-flex justify-content-center mt-3">
+          <Row className="d-flex justify-content-center mt-3 w-50">
             <Col xs={12} className="mb-3">
               <Form.Label>Date of Birth</Form.Label>
               <Form.Control
