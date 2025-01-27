@@ -6,8 +6,8 @@ import Form from 'react-bootstrap/Form';
 import Row from 'react-bootstrap/Row';
 import { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
-import ReCAPTCHA from 'react-google-recaptcha';
-
+import ReactDatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 function App() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -33,7 +33,7 @@ function App() {
       return;
     }
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+    const emailRegex = /^[a-zA-Z0-9.]+@gmail\.com$/;
     if (!formData.email) {
       toast.error('Email is required!');
       return;
@@ -61,10 +61,7 @@ function App() {
       return;
     }
 
-    if (!captchaVerified) {
-      toast.error('Please verify the CAPTCHA before submitting!');
-      return;
-    }
+   
 
     toast.success('Form submitted successfully!');
 
@@ -92,7 +89,7 @@ function App() {
 
         <Form onSubmit={handleSubmit}>
           <div className=" justify-content-center"/>
-            <Col xs={6} className="mb-3">
+            <Col xs={6} lg={3} className="mb-3">
               <Form.Label>First Name</Form.Label>
               <Form.Control
                 type="text"
@@ -111,7 +108,7 @@ function App() {
               />
             </Col>
 
-            <Col xs={6} className="mb-3">
+            <Col xs={6} lg={3}className="mb-3">
               <Form.Label>Last Name</Form.Label>
               <Form.Control
                 type="text"
@@ -155,19 +152,27 @@ function App() {
             </div>
           </div>
 
-          <Row className="d-flex justify-content-center mt-3 w-50">
-            <Col xs={12} className="mb-3">
-              <Form.Label>Date of Birth</Form.Label>
-              <Form.Control
-                type="date"
-                value={formData.dateOfBirth}
-                onChange={(e) => setFormData({ ...formData, dateOfBirth: e.target.value })}
-              />
+          <Row className="d-flex justify-content-center mt-3 " >
+            <Col xs={6} lg={4} className="mb-3">
+             
+              
+              <Form.Group controlId="dateOfBirth"  >
+  <Form.Label >Date of Birth</Form.Label>
+  <ReactDatePicker  
+    selected={formData.dateOfBirth ? new Date(formData.dateOfBirth) : null}
+    onChange={(date) => 
+      setFormData({ ...formData, dateOfBirth: date.toISOString().split("T")[0] })
+    }
+    placeholderText="Select Date"
+    dateFormat="yyyy-MM-dd"
+    className="form-control " 
+  />
+</Form.Group>
             </Col>
           </Row>
 
           <Row className="d-flex justify-content-center mt-3">
-            <Col xs={6} className="mb-3">
+            <Col xs={6} lg={3} className="mb-3">
               <Form.Label>Email</Form.Label>
               <Form.Control
                 type="text"
@@ -179,7 +184,7 @@ function App() {
           </Row>
 
           <Row className="d-flex justify-content-center mt-3">
-            <Col xs={6} className="mb-3">
+            <Col xs={6} lg={3} className="mb-3">
               <Form.Label>Phone Number</Form.Label>
               <Form.Control
                 type="text"
@@ -196,7 +201,7 @@ function App() {
 
           <Button
             style={{ width: '150px', marginTop: '50px', borderRadius: '10px' }}
-            type="submit"
+            type="submit" onClick={handleSubmit}
           >
             Submit
           </Button>
